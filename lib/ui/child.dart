@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'size/All.dart';
 import 'size/L.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Child extends StatefulWidget {
   @override
@@ -30,14 +32,11 @@ class _ChildState extends State<Child> {
             padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
             child: Text(
               "FashDeal",
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
-              ),
+              style: GoogleFonts.greatVibes(
+                  textStyle: TextStyle(fontSize: 40, color: Colors.orange)),
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           elevation: 2.0,
           bottom: PreferredSize(
             preferredSize: Size(400, 150),
@@ -51,13 +50,9 @@ class _ChildState extends State<Child> {
                   ),
                   child: Center(
                     child: Text(
-                      "Mens's",
-                      style: TextStyle(
-                        fontSize: 45.0,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5,
-                        color: Colors.white,
-                      ),
+                      "-   Children's   -",
+                      style: GoogleFonts.orbitron(
+                          textStyle: TextStyle(fontSize: 35)),
                     ),
                   ),
                 ),
@@ -65,9 +60,11 @@ class _ChildState extends State<Child> {
                   labelStyle:
                       TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                   controller: tabController,
-                  indicatorColor: Colors.transparent,
+                  indicatorColor: Colors.orange,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicatorWeight: 3,
                   labelColor: Colors.orange,
-                  unselectedLabelColor: Theme.of(context).hintColor,
+                  unselectedLabelColor: Colors.orange,
                   tabs: [
                     Container(
                       height: 50,
