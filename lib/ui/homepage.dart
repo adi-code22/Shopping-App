@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:shopping_app/account/account.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:favorite_button/favorite_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,10 +15,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   String url = "https://www.finlage.in/upi-pay/00003D6";
 
   @override
   Widget build(BuildContext context) {
+    final User _auth = auth.currentUser;
+    String _email = _auth.email;
+    print(_email);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -31,6 +38,13 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.favorite),
+              iconSize: 30,
+              color: Colors.orange,
+              onPressed: () {})
+        ],
         title: Padding(
           padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
           child: Text(
@@ -275,6 +289,7 @@ class _HomePageState extends State<HomePage> {
                                 return showDialog(
                                     context: context,
                                     builder: (context) {
+                                      bool fav = false;
                                       return AlertDialog(
                                         backgroundColor:
                                             Colors.black.withOpacity(0.8),
@@ -304,15 +319,34 @@ class _HomePageState extends State<HomePage> {
                                                 height: 50,
                                                 width: 220,
                                                 //color: Colors.blue,
-                                                child: Center(
-                                                  child: Text(
-                                                    document.data()["Price"],
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.orange,
-                                                        fontSize: 25),
-                                                  ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        document
+                                                            .data()["Price"],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.orange,
+                                                            fontSize: 25),
+                                                      ),
+                                                    ),
+                                                    FavoriteButton(
+                                                      valueChanged: (fav) {
+                                                        if (fav = true) {
+                                                          _addFav(_email);
+                                                        } else {
+                                                          _removeFav(_email);
+                                                        }
+                                                      },
+                                                      iconColor: Colors.orange,
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                               Padding(
@@ -419,5 +453,17 @@ class _HomePageState extends State<HomePage> {
     } else {
       print('Could not launch $url');
     }
+  }
+
+  void _addFav(_email) {
+    firestore.collection(_email).doc("fav").set({
+      "fav": 1,
+    });
+  }
+
+  void _removeFav(_email) {
+    firestore.collection(_email).add({
+      "fav": 0,
+    });
   }
 }
