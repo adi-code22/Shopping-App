@@ -174,11 +174,12 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 children: [
                                   Container(
-                                      width: 30,
-                                      height: 30,
-                                      child: Image(
-                                          image: AssetImage(
-                                              'assets/children.png'))),
+                                    width: 30,
+                                    height: 30,
+                                    child: Image(
+                                      image: AssetImage('assets/children.png'),
+                                    ),
+                                  ),
                                   Container(
                                       child: Text(
                                     "Children's",
@@ -211,7 +212,8 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "-   Fashion is Life   -",
                         style: GoogleFonts.orbitron(
-                            textStyle: TextStyle(fontSize: 35)),
+                          textStyle: TextStyle(fontSize: 35),
+                        ),
                       ),
                     ),
                   ),
@@ -247,16 +249,19 @@ class _HomePageState extends State<HomePage> {
                               ),
                               trailing: Container(
                                 height: 35,
-                                width: 70,
+                                width: 80,
                                 decoration: BoxDecoration(
                                     border: Border.all(color: Colors.white)),
                                 child: Center(
-                                  child: Text(
-                                    document.data()["Price"] ?? "No Data",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.orange),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Text(
+                                      document.data()["Price"] ?? "No Data",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.orange),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -280,64 +285,105 @@ class _HomePageState extends State<HomePage> {
                                               fontSize: 30,
                                               color: Colors.orange),
                                         ),
-                                        content: Column(
-                                          children: [
-                                            Container(
-                                              height: 220,
-                                              width: 220,
-                                              color: Colors.black,
-                                              child: Image(
-                                                  image: NetworkImage(document
-                                                      .data()["Image"])),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.white,
-                                                      width: 3)),
-                                              height: 50,
-                                              width: 220,
-                                              //color: Colors.blue,
-                                              child: Center(
-                                                child: Text(
-                                                  document.data()["Price"],
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.orange,
-                                                      fontSize: 25),
+                                        content: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 220,
+                                                width: 220,
+                                                color: Colors.black,
+                                                child: Image(
+                                                    image: NetworkImage(document
+                                                        .data()["Image"])),
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 3)),
+                                                height: 50,
+                                                width: 220,
+                                                //color: Colors.blue,
+                                                child: Center(
+                                                  child: Text(
+                                                    document.data()["Price"],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.orange,
+                                                        fontSize: 25),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          padding:
-                                                              EdgeInsets
-                                                                  .fromLTRB(
-                                                                      30,
-                                                                      40,
-                                                                      30,
-                                                                      40),
-                                                          primary:
-                                                              Colors.orange),
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    "WishList",
-                                                    style: TextStyle(
-                                                        fontSize: 30,
-                                                        color: Colors.black),
-                                                  )),
-                                            ),
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.orange),
-                                                onPressed: () {},
-                                                child: Text("Buy")),
-                                          ],
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  document
+                                                      .data()["Description"],
+                                                  style: TextStyle(
+                                                      color: Colors.orange),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(50,
+                                                                    10, 50, 10),
+                                                            primary:
+                                                                Colors.orange),
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      "WishList",
+                                                      style: TextStyle(
+                                                          fontSize: 30,
+                                                          color: Colors.black),
+                                                    )),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(85,
+                                                                    10, 85, 10),
+                                                            primary:
+                                                                Colors.orange),
+                                                    onPressed: _launchURL,
+                                                    child: Text(
+                                                      "Buy",
+                                                      style: TextStyle(
+                                                          fontSize: 30,
+                                                          color: Colors.black),
+                                                    )),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(65,
+                                                                    10, 65, 10),
+                                                            primary:
+                                                                Colors.orange),
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      "Cancel",
+                                                      style: TextStyle(
+                                                          fontSize: 30,
+                                                          color: Colors.black),
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     });
@@ -365,5 +411,13 @@ class _HomePageState extends State<HomePage> {
         ),
       ]),
     );
+  }
+
+  void _launchURL() async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: true);
+    } else {
+      print('Could not launch $url');
+    }
   }
 }
