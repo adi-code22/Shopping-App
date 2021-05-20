@@ -254,6 +254,7 @@ class _HomePageState extends State<HomePage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: ListTile(
+                              isThreeLine: true,
                               tileColor: Colors.black.withOpacity(0.6),
                               title: Text(
                                 document.data()["ItemName"] ?? "No Data",
@@ -262,9 +263,21 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 23),
                               ),
-                              subtitle: Text(
-                                document.data()["Description"] ?? "No Data",
-                                style: TextStyle(color: Colors.white),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    document.data()["Description"] ?? "No Data",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    document.data()["Size"],
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                ],
                               ),
                               trailing: Container(
                                 height: 35,
@@ -287,19 +300,45 @@ class _HomePageState extends State<HomePage> {
                               leading: CircleAvatar(
                                 radius: 30,
                                 backgroundImage: NetworkImage(
-                                  document.data()["Image"] ?? "No Data",
+                                  document.data()["Image"] ??
+                                      "https://htmlcolorcodes.com/assets/images/colors/baby-blue-color-solid-background-1920x1080.png",
                                 ),
                               ),
                               onTap: () {
                                 return showDialog(
                                     context: context,
                                     builder: (context) {
-                                      bool fav = false;
+                                      //bool fav = false;
+                                      String temp = document.data()["ItemName"];
+                                      bool dec;
+                                      var deca = FirebaseFirestore.instance
+                                          .collection(_email)
+                                          .doc(temp)
+                                          .get()
+                                          .then((doc) {
+                                        if (doc.data()["fav"] == true) {
+                                          setState(() {
+                                            dec = true;
+                                          });
+                                          print(dec);
+                                        } else {
+                                          setState(() {
+                                            dec = false;
+                                          });
+                                          print(dec);
+                                        }
+                                      });
+                                      // .snapshots()
+                                      // .map((DocumentSnapshot document) {})
+                                      // .toList();
+
                                       return AlertDialog(
                                         backgroundColor:
                                             Colors.black.withOpacity(0.8),
                                         title: Text(
-                                          document.data()["ItemName"] ??
+                                          document.data()["ItemName"] +
+                                                  " - " +
+                                                  document.data()["Size"] ??
                                               "No Data",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -343,14 +382,13 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     ),
                                                     FavoriteButton(
+                                                      isFavorite: dec,
                                                       valueChanged: (fav) {
                                                         fav = !fav;
                                                         if (fav = true) {
-                                                          String temp =
-                                                              document.data()[
-                                                                  "ItemName"];
                                                           _addFav(_email, temp);
-                                                          print(fav);
+                                                          print(fav.toString() +
+                                                              temp);
                                                         } else {
                                                           String temp =
                                                               document.data()[
@@ -456,7 +494,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addFav(_email, temp) {
-    cref.doc().set({
+    cref.doc(temp).set({
       "fav": true,
       "Item": temp,
     });
