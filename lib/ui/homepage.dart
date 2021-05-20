@@ -7,6 +7,7 @@ import 'package:shopping_app/account/account.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,8 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final CollectionReference cref = FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser.email);
+
   String url = "https://www.finlage.in/upi-pay/00003D6";
 
   @override
@@ -251,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                             child: ListTile(
                               tileColor: Colors.black.withOpacity(0.6),
                               title: Text(
-                                document.data()["ItemName"],
+                                document.data()["ItemName"] ?? "No Data",
                                 style: TextStyle(
                                     color: Colors.orange,
                                     fontWeight: FontWeight.bold,
@@ -294,7 +299,8 @@ class _HomePageState extends State<HomePage> {
                                         backgroundColor:
                                             Colors.black.withOpacity(0.8),
                                         title: Text(
-                                          document.data()["ItemName"],
+                                          document.data()["ItemName"] ??
+                                              "No Data",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 30,
@@ -338,10 +344,20 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                     FavoriteButton(
                                                       valueChanged: (fav) {
+                                                        fav = !fav;
                                                         if (fav = true) {
-                                                          _addFav(_email);
+                                                          String temp =
+                                                              document.data()[
+                                                                  "ItemName"];
+                                                          _addFav(_email, temp);
+                                                          print(fav);
                                                         } else {
-                                                          _removeFav(_email);
+                                                          String temp =
+                                                              document.data()[
+                                                                  "ItemName"];
+                                                          _removeFav(
+                                                              _email, temp);
+                                                          print("False");
                                                         }
                                                       },
                                                       iconColor: Colors.orange,
@@ -366,30 +382,13 @@ class _HomePageState extends State<HomePage> {
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                             padding: EdgeInsets
-                                                                .fromLTRB(50,
-                                                                    10, 50, 10),
-                                                            primary:
-                                                                Colors.orange),
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      "WishList",
-                                                      style: TextStyle(
-                                                          fontSize: 30,
-                                                          color: Colors.black),
-                                                    )),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            padding: EdgeInsets
                                                                 .fromLTRB(85,
                                                                     10, 85, 10),
                                                             primary:
                                                                 Colors.orange),
-                                                    onPressed: _launchURL,
+                                                    onPressed: () {
+                                                      _launchURL(url);
+                                                    },
                                                     child: Text(
                                                       "Buy",
                                                       style: TextStyle(
@@ -447,7 +446,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _launchURL() async {
+  void _launchURL(url) async {
+    String url = "http://www.finlage.in/upi-pay/00003D6";
     if (await canLaunch(url)) {
       await launch(url, forceWebView: true);
     } else {
@@ -455,15 +455,16 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _addFav(_email) {
-    firestore.collection(_email).doc("fav").set({
-      "fav": 1,
+  void _addFav(_email, temp) {
+    cref.doc().set({
+      "fav": true,
+      "Item": temp,
     });
   }
 
-  void _removeFav(_email) {
-    firestore.collection(_email).add({
-      "fav": 0,
+  void _removeFav(_email, temp) {
+    cref.doc(temp).set({
+      "fav": false,
     });
   }
 }
