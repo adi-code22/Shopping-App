@@ -55,24 +55,20 @@ class _AuthenticationState extends State<Authentication> {
                 child: Container(
                   width: MediaQuery.of(context).size.width / 1.3,
                   child: TextFormField(
-                    validator: (val) {
-                      val.isEmpty || !(val.contains('@'))
-                          ? 'Enter a valid email address'
-                          : null;
-                    },
+                    validator: (val) => val.isEmpty || !(val.contains('@'))
+                        ? "Enter a valid email address"
+                        : null,
                     style: TextStyle(
                       color: Colors.white,
                     ),
                     controller: _emailField,
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black,
                       hintText: "something@gmail.com",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                      ),
+                      hintStyle: TextStyle(color: Colors.white, fontSize: 15),
                       labelText: "Email",
-                      labelStyle: TextStyle(
-                        color: Colors.white,
-                      ),
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
@@ -89,15 +85,15 @@ class _AuthenticationState extends State<Authentication> {
                   controller: _passwordField,
                   obscureText: true,
                   decoration: InputDecoration(
+                    fillColor: Colors.black,
+                    filled: true,
                     hintText: "password",
-                    hintStyle: TextStyle(
-                      color: Colors.white,
-                    ),
+                    hintStyle: TextStyle(color: Colors.white, fontSize: 15),
                     labelText: "Password",
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                    ),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 20),
                   ),
+                  validator: (value) =>
+                      value.isEmpty ? "Enter a valid password" : null,
                 ),
               ),
               SizedBox(
@@ -133,10 +129,12 @@ class _AuthenticationState extends State<Authentication> {
                 ),
                 child: MaterialButton(
                   onPressed: () async {
-                    bool shouldNAvigate =
-                        await signIn(_emailField.text, _passwordField.text);
-                    if (shouldNAvigate) {
-                      Navigator.pushNamed(context, '/home');
+                    if (_formKey.currentState.validate()) {
+                      bool shouldNAvigate =
+                          await signIn(_emailField.text, _passwordField.text);
+                      if (shouldNAvigate) {
+                        Navigator.pushNamed(context, '/home');
+                      }
                     }
                   },
                   child: Text("Log in"),
