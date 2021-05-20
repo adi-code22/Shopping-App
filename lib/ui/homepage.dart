@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context) {
                                       //bool fav = false;
                                       String temp = document.data()["ItemName"];
-                                      bool dec;
+                                      bool dec = true;
                                       var deca = FirebaseFirestore.instance
                                           .collection(_email)
                                           .doc(temp)
@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                                             dec = true;
                                           });
                                           print(dec);
-                                        } else {
+                                        } else if (doc.data()["fav"] == false) {
                                           setState(() {
                                             dec = false;
                                           });
@@ -382,13 +382,15 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     ),
                                                     FavoriteButton(
-                                                      isFavorite: dec,
                                                       valueChanged: (fav) {
-                                                        fav = !fav;
+                                                        setState(() {
+                                                          //fav = !fav;
+                                                        });
                                                         if (fav = true) {
                                                           _addFav(_email, temp);
                                                           print(fav.toString() +
                                                               temp);
+                                                          print(dec);
                                                         } else {
                                                           String temp =
                                                               document.data()[
@@ -398,6 +400,8 @@ class _HomePageState extends State<HomePage> {
                                                           print("False");
                                                         }
                                                       },
+                                                      isFavorite:
+                                                          dec ? true : false,
                                                       iconColor: Colors.orange,
                                                     )
                                                   ],
