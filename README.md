@@ -9,7 +9,7 @@
 # Fash Deal
 
 Shopping app for Men, Women, Children
-Done in collaboration with [Anoop](https://github.com/Anoop072001) for **BUID FROM HOME 2021**
+Done in collaboration with [Anoop](https://github.com/Anoop072001) for **BUILD FROM HOME 2021**
 
 
 
